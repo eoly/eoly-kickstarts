@@ -1,4 +1,4 @@
-install
+install url --url http://http://mirrors.umflint.edu/CentOS/7/os/x86_64
 lang en_US.UTF-8
 keyboard us
 text
