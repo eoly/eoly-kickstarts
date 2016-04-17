@@ -9,7 +9,7 @@ rootpw "root"
 timezone --utc America/Detroit
 
 repo --name="Extra Packages for Enterprise Linux" --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=x86_64
-repo --name=puppetlabs-release-pc1 --baseurl=https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+repo --name=puppetlabs-release-pc1 --baseurl=https://yum.puppetlabs.com/el/7/PC1/x86_64
 
 zerombr
 bootloader --location=mbr --append="nofb quiet splash=quiet net.ifnames=0 biosdevname=0"
