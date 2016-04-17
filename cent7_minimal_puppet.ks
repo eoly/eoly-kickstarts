@@ -9,11 +9,10 @@ rootpw --iscrypted $1$DTr7SJHS$bZZYT3nACwEEfCw8TKOWI1
 timezone --utc America/Detroit
 
 repo --name="Extra Packages for Enterprise Linux" --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=x86_64
-repo --name=puppetlabs-products --baseurl=https://yum.puppetlabs.com/el/7/products/x86_64
-repo --name=puppetlabs-deps --baseurl=https://yum.puppetlabs.com/el/7/dependencies/x86_64
+repo --name=puppetlabs-release-pc1 --baseurl=https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
 
 zerombr
-bootloader --location=mbr --append="nofb quiet splash=quiet" 
+bootloader --location=mbr --append="nofb quiet splash=quiet net.ifnames=0 biosdevname=0"
 
 %include /tmp/diskpart.cfg
 
@@ -22,15 +21,14 @@ reboot
 %packages --nobase
 @core
 
-puppet
+puppet-agent
+net-tools
 vim-common
 vim-enhanced
 ntpdate
 ntp
 wget
 tcpdump
-git
-nc
 
 %end
 
@@ -88,24 +86,8 @@ echo "updating system time"
 # update all the base packages from the updates repository
 yum -t -y -e 0 update
 
+sync
 
-echo "Configuring puppet"
-cat > /etc/puppet/puppet.conf << EOF
-
-[main]
-logdir = /var/log/puppet
-rundir = /var/run/puppet
-ssldir = $vardir/ssl
-environment = $confdir/environments
-basemodulepath = $confdir/modules:/opt/puppet/share/puppet/modules
-
-[agent]
-classfile = $vardir/classes.txt
-localconfig = $vardir/localconfig
-
-EOF
-
-# Setup puppet to run on system reboot
-systemctl enable puppet
+) 2>&1 | tee /root/install.post.log
 
 %end
